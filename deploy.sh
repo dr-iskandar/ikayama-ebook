@@ -8,7 +8,7 @@ set -e
 
 ENV=${1:-production}
 SERVER_IP="212.85.26.230"
-APP_NAME="ikayama_katalog"
+APP_NAME="ikayama-ebook"
 APP_PATH="/var/www/$APP_NAME"
 GIT_REPO="git@github.com:username/ikayama_katalog.git"  # Update this with actual repo URL
 

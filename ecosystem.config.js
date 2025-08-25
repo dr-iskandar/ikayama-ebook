@@ -1,9 +1,9 @@
 module.exports = {
   apps: [
     {
-      name: 'ikayama-backend',
+      name: 'ikayama-ebook-backend',
       script: './backend/server.js',
-      cwd: '/var/www/ikayama_katalog',
+      cwd: '/var/www/ikayama-ebook',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -34,9 +34,9 @@ module.exports = {
       time: true
     },
     {
-      name: 'ikayama-payment-gateway',
+      name: 'ikayama-ebook-payment-gateway',
       script: './pvs_pg/index.js',
-      cwd: '/var/www/ikayama_katalog',
+      cwd: '/var/www/ikayama-ebook',
       instances: 1,
       autorestart: true,
       watch: false,
@@ -61,8 +61,8 @@ module.exports = {
       user: 'root',
       host: '212.85.26.230',
       ref: 'origin/main',
-      repo: 'git@github.com:username/ikayama_katalog.git',
-      path: '/var/www/ikayama_katalog',
+      repo: 'git@github.com:username/ikayama-ebook.git',
+      path: '/var/www/ikayama-ebook',
       'pre-deploy-local': '',
       'post-deploy': 'npm install --prefix backend && npm install --prefix pvs_pg && pm2 reload ecosystem.config.js --env production',
       'pre-setup': 'mkdir -p /var/www/ikayama_katalog/logs'

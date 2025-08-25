@@ -1,7 +1,7 @@
-# Ikayama Katalog - Deployment Guide
+# Ikayama Ebook - Deployment Guide
 
 ## Overview
-This guide covers the complete deployment process for Ikayama Katalog application to production server with SSL certificate and domain configuration.
+This guide covers the complete deployment process for Ikayama Ebook application to production server with SSL certificate and domain configuration.
 
 **Production Details:**
 - Server: 212.85.26.230
@@ -31,7 +31,7 @@ ssh root@212.85.26.230
 Update the Git repository URL in `ecosystem.config.js` and `deploy.sh`:
 ```javascript
 // In ecosystem.config.js
-repo: 'git@github.com:your-username/ikayama_katalog.git'
+repo: 'git@github.com:your-username/ikayama-ebook.git'
 ```
 
 ## Deployment Process
@@ -256,8 +256,8 @@ sudo ufw enable
 ## Monitoring and Logs
 
 ### Application Logs
-- Backend logs: `/var/www/ikayama_katalog/logs/backend-*.log`
-- Payment logs: `/var/www/ikayama_katalog/logs/payment-*.log`
+- Backend logs: `/var/www/ikayama-ebook/logs/backend-*.log`
+- Payment logs: `/var/www/ikayama-ebook/logs/payment-*.log`
 
 ### Nginx Logs
 - Access log: `/var/log/nginx/ebook.ikayama.com.access.log`
@@ -272,8 +272,8 @@ pm2 monit
 pm2 list
 
 # Detailed info
-pm2 show ikayama-backend
-pm2 show ikayama-payment-gateway
+pm2 show ikayama-ebook-backend
+pm2 show ikayama-ebook-payment-gateway
 ```
 
 ## Troubleshooting
@@ -304,7 +304,7 @@ pm2 show ikayama-payment-gateway
    pm2 logs
    
    # Check application logs
-   tail -f /var/www/ikayama_katalog/logs/backend-error.log
+   tail -f /var/www/ikayama-ebook/logs/backend-error.log
    ```
 
 4. **Database Connection Issues**
@@ -342,7 +342,7 @@ psql -h localhost -U ikayama_user ikayama_db_prod < backup_20240101.sql
 ### Application Backup
 ```bash
 # Backup application files
-tar -czf ikayama_backup_$(date +%Y%m%d).tar.gz /var/www/ikayama_katalog
+tar -czf ikayama_backup_$(date +%Y%m%d).tar.gz /var/www/ikayama-ebook
 ```
 
 ## Performance Optimization
