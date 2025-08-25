@@ -26,7 +26,7 @@ module.exports = {
         EMAIL_USER: 'noreply@ikayama.com',
         EMAIL_PASS: 'production_email_password',
         EMAIL_FROM: 'noreply@ikayama.com',
-        BASE_URL: 'http://212.85.26.230:3001'
+        BASE_URL: 'https://ebook.ikayama.com'
       },
       error_file: './logs/backend-error.log',
       out_file: './logs/backend-out.log',
