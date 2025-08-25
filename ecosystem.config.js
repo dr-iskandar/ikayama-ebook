@@ -10,11 +10,11 @@ module.exports = {
       max_memory_restart: '1G',
       env: {
         NODE_ENV: 'development',
-        PORT: 3001
+        PORT: 5011
       },
       env_production: {
         NODE_ENV: 'production',
-        PORT: 3001,
+        PORT: 5011,
         DB_HOST: 'localhost',
         DB_PORT: 5432,
         DB_NAME: 'ikayama_db_prod',
@@ -43,11 +43,11 @@ module.exports = {
       max_memory_restart: '512M',
       env: {
         NODE_ENV: 'development',
-        PORT: 3002
+        PORT: 5012
       },
       env_production: {
         NODE_ENV: 'production',
-        PORT: 3002
+        PORT: 5012
       },
       error_file: './logs/payment-error.log',
       out_file: './logs/payment-out.log',

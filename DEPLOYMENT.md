@@ -9,8 +9,8 @@ This guide covers the complete deployment process for Ikayama Katalog applicatio
 - SSL: Let's Encrypt via Certbot
 - Web Server: Nginx (reverse proxy)
 - Process Manager: PM2
-- Backend Port: 3001 (internal)
-- Payment Gateway Port: 3002 (internal)
+- Backend Port: 5011 (internal)
+- Payment Gateway Port: 5012 (internal)
 
 ## Prerequisites
 
@@ -69,14 +69,14 @@ This will:
 The Nginx configuration includes:
 - HTTP to HTTPS redirect
 - SSL termination with Let's Encrypt certificates
-- Reverse proxy to backend (port 3001)
-- Reverse proxy to payment gateway (port 3002)
+- Reverse proxy to backend (port 5011)
+- Reverse proxy to payment gateway (port 5012)
 - Security headers and gzip compression
 - Static file caching
 
 ### 2. PM2 Configuration (`ecosystem.config.js`)
-- Backend application on port 3001
-- Payment gateway on port 3002
+- Backend application on port 5011
+- Payment gateway on port 5012
 - Production environment variables
 - Automatic restart and logging
 
@@ -84,7 +84,69 @@ The Nginx configuration includes:
 - `backend/.env.production` - Backend environment variables
 - `pvs_pg/.env.production` - Payment gateway environment variables
 
-## SSL Certificate Management
+## SSL Certificate Setup
+
+The deployment automatically sets up SSL certificates using Let's Encrypt Certbot with **webroot method** for safe, non-disruptive certificate generation:
+
+- **Domain**: ebook.ikayama.com
+- **Certificate Authority**: Let's Encrypt
+- **Method**: Webroot (safe for servers with multiple applications)
+- **Webroot Directory**: `/var/www/certbot`
+- **Auto-renewal**: Configured via cron job with webroot method
+- **Security**: Modern TLS 1.2/1.3 with strong ciphers
+
+### Why Webroot Method?
+
+The webroot method is used instead of standalone mode to ensure:
+- **Non-disruptive**: Doesn't interfere with other applications on the server
+- **Safe**: Doesn't require stopping existing web services
+- **Reliable**: Works alongside other Nginx configurations
+- **Secure**: Uses dedicated directory for certificate validation
+
+### Certificate Validation Process
+
+1. Certbot places validation files in `/var/www/certbot/.well-known/acme-challenge/`
+2. Let's Encrypt accesses these files via HTTP on port 80
+3. Nginx serves these files through the `/.well-known/acme-challenge/` location block
+4. Certificate is issued without disrupting other services
+
+### Manual SSL Setup
+
+If you need to set up SSL manually using the safe webroot method:
+
+```bash
+# Create webroot directory
+sudo mkdir -p /var/www/certbot
+sudo chown -R www-data:www-data /var/www/certbot
+
+# Install Certbot
+sudo apt update
+sudo apt install -y certbot
+
+# Get certificate using webroot method (safe)
+sudo certbot certonly --webroot \
+    --webroot-path=/var/www/certbot \
+    -d ebook.ikayama.com \
+    --non-interactive \
+    --agree-tos \
+    --email admin@ikayama.com
+
+# Reload Nginx to use new certificates
+sudo nginx -t && sudo systemctl reload nginx
+
+# Test auto-renewal with webroot
+sudo certbot renew --webroot --webroot-path=/var/www/certbot --dry-run
+
+# Setup auto-renewal cron job
+(crontab -l 2>/dev/null; echo "0 12 * * * /usr/bin/certbot renew --webroot --webroot-path=/var/www/certbot --quiet && /usr/bin/systemctl reload nginx") | crontab -
+```
+
+### Important Notes
+
+- **Never use standalone mode** (`--standalone`) on shared servers as it can disrupt other applications
+- The webroot method requires the `/.well-known/acme-challenge/` location block in Nginx
+- Certificate renewal happens automatically without service interruption
+- The webroot directory `/var/www/certbot` must be accessible by both Certbot and Nginx
 
 ### Automatic Renewal
 Certbot automatically renews certificates. To manually renew:
@@ -126,7 +188,7 @@ Update `backend/.env.production` with actual values:
 
 ```env
 NODE_ENV=production
-PORT=3001
+PORT=5011
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=ikayama_db_prod
@@ -146,7 +208,7 @@ Update `pvs_pg/.env.production`:
 
 ```env
 NODE_ENV=production
-PORT=3002
+PORT=5012
 ```
 
 ## Database Setup

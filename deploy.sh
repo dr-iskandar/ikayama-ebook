@@ -83,13 +83,37 @@ deploy_to_server() {
     print_status "Payment Gateway (internal): http://127.0.0.1:3002"
 }
 
-# Setup SSL certificate with Certbot
+# Function to setup SSL with Certbot using webroot method
 setup_ssl() {
-    print_status "Setting up SSL certificate for ebook.ikayama.com..."
+    print_status "Setting up SSL with Certbot using webroot method..."
     
-    ssh root@$SERVER_IP "certbot --nginx -d ebook.ikayama.com --non-interactive --agree-tos --email admin@ikayama.com"
+    # Create webroot directory for Certbot
+    ssh root@$SERVER_IP "mkdir -p /var/www/certbot && chown -R www-data:www-data /var/www/certbot"
     
-    print_status "SSL certificate setup completed!"
+    # Install Certbot if not already installed
+    ssh root@$SERVER_IP "if ! command -v certbot &> /dev/null; then \
+        apt update && \
+        apt install -y certbot; \
+    fi"
+    
+    # Get SSL certificate using webroot method (non-disruptive)
+    print_status "Obtaining SSL certificate for ebook.ikayama.com using webroot method..."
+    ssh root@$SERVER_IP "certbot certonly --webroot \
+        --webroot-path=/var/www/certbot \
+        -d ebook.ikayama.com \
+        --non-interactive \
+        --agree-tos \
+        --email admin@ikayama.com"
+    
+    # Reload Nginx to use the new certificates
+    print_status "Reloading Nginx with SSL certificates..."
+    ssh root@$SERVER_IP "nginx -t && systemctl reload nginx"
+    
+    # Setup auto-renewal with webroot method
+    print_status "Setting up SSL certificate auto-renewal..."
+    ssh root@$SERVER_IP "(crontab -l 2>/dev/null; echo '0 12 * * * /usr/bin/certbot renew --webroot --webroot-path=/var/www/certbot --quiet && /usr/bin/systemctl reload nginx') | crontab -"
+    
+    print_status "SSL setup completed using safe webroot method!"
 }
 
 # Setup Nginx configuration
