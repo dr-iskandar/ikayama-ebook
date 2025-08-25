@@ -161,7 +161,7 @@ function updateBooksUI() {
         // Create card HTML with micro-interactions
         bookCard.innerHTML = `
             <div class="relative overflow-hidden">
-                <img src="${book.previewImage ? '/uploads/covers/' + book.previewImage : '/assets/images/default-cover.svg'}" alt="${book.title} Cover" class="w-full h-64 object-cover cursor-pointer transition-transform duration-300 group-hover:scale-105" onclick="showPreview(${book.id})">
+                <img src="${book.previewImage || '/assets/images/default-cover.svg'}" alt="${book.title} Cover" class="w-full h-64 object-cover cursor-pointer transition-transform duration-300 group-hover:scale-105" onclick="showPreview(${book.id})">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
                     <button onclick="copyBookUrl(${book.id})" class="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full text-gray-700 hover:text-primary hover:bg-white transition-all duration-200 shadow-lg hover:shadow-xl mobile-touch-target flex items-center justify-center" title="Copy Link">
@@ -655,7 +655,7 @@ function showPreview(bookId) {
     
     // Update gambar preview
     const previewImage = document.getElementById('previewImage');
-    previewImage.src = book.previewImage ? '/uploads/covers/' + book.previewImage : '/assets/images/default-cover.svg';
+    previewImage.src = book.previewImage || '/assets/images/default-cover.svg';
     previewImage.alt = book.title;
     
     // Update sinopsis
