@@ -12,6 +12,7 @@ router.post('/:id/download', bookController.updateDownloadCount);
 
 // Admin routes
 router.post('/', isAdmin, bookController.createBook);
+router.delete('/bulk-delete', isAdmin, bookController.bulkDeleteBooks);
 router.put('/:id', isAdmin, bookController.updateBook);
 router.delete('/:id', isAdmin, bookController.deleteBook);
 

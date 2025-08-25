@@ -258,3 +258,68 @@ exports.updateDownloadCount = async (req, res) => {
     });
   }
 };
+
+// Bulk delete books
+exports.bulkDeleteBooks = async (req, res) => {
+  try {
+    const { bookIds } = req.body;
+    
+    if (!bookIds || !Array.isArray(bookIds) || bookIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Book IDs are required and must be an array'
+      });
+    }
+    
+    // Validate that all IDs are numbers
+    const validIds = bookIds.filter(id => !isNaN(parseInt(id)));
+    if (validIds.length !== bookIds.length) {
+      return res.status(400).json({
+        success: false,
+        message: 'All book IDs must be valid numbers'
+      });
+    }
+    
+    // Check if books exist
+    const existingBooks = await Book.findAll({
+      where: {
+        id: {
+          [Op.in]: validIds
+        }
+      }
+    });
+    
+    if (existingBooks.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No books found with the provided IDs'
+      });
+    }
+    
+    // Delete the books
+    const deletedCount = await Book.destroy({
+      where: {
+        id: {
+          [Op.in]: validIds
+        }
+      }
+    });
+    
+    return res.status(200).json({
+      success: true,
+      message: `Successfully deleted ${deletedCount} book(s)`,
+      data: {
+        deletedCount,
+        requestedCount: validIds.length
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error bulk deleting books:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Gagal menghapus buku secara massal',
+      error: error.message
+    });
+  }
+};
