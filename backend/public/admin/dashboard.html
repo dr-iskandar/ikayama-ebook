@@ -1886,101 +1886,109 @@
                 }).format(amount);
             }
             
-            // Bulk selection functions
-            function toggleSelectAll() {
-                const selectAllCheckbox = document.getElementById('selectAllBooks');
-                const bookCheckboxes = document.querySelectorAll('.book-checkbox');
-                
-                bookCheckboxes.forEach(checkbox => {
-                    checkbox.checked = selectAllCheckbox.checked;
-                });
-                
-                updateSelection();
-            }
-            
-            function updateSelection() {
-                const bookCheckboxes = document.querySelectorAll('.book-checkbox');
-                const selectedCheckboxes = document.querySelectorAll('.book-checkbox:checked');
-                const selectAllCheckbox = document.getElementById('selectAllBooks');
-                const bulkActions = document.getElementById('bulkActions');
-                const selectedCount = document.getElementById('selectedCount');
-                
-                // Update select all checkbox state
-                if (selectedCheckboxes.length === 0) {
-                    selectAllCheckbox.indeterminate = false;
-                    selectAllCheckbox.checked = false;
-                } else if (selectedCheckboxes.length === bookCheckboxes.length) {
-                    selectAllCheckbox.indeterminate = false;
-                    selectAllCheckbox.checked = true;
-                } else {
-                    selectAllCheckbox.indeterminate = true;
-                    selectAllCheckbox.checked = false;
-                }
-                
-                // Show/hide bulk actions
-                if (selectedCheckboxes.length > 0) {
-                    bulkActions.classList.remove('hidden');
-                    selectedCount.textContent = selectedCheckboxes.length;
-                } else {
-                    bulkActions.classList.add('hidden');
-                }
-            }
-            
-            function clearSelection() {
-                const bookCheckboxes = document.querySelectorAll('.book-checkbox');
-                const selectAllCheckbox = document.getElementById('selectAllBooks');
-                
-                bookCheckboxes.forEach(checkbox => {
-                    checkbox.checked = false;
-                });
-                selectAllCheckbox.checked = false;
-                selectAllCheckbox.indeterminate = false;
-                
-                updateSelection();
-            }
-            
-            async function bulkDeleteBooks() {
-                const selectedCheckboxes = document.querySelectorAll('.book-checkbox:checked');
-                const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value);
-                
-                if (selectedIds.length === 0) {
-                    alert('Please select books to delete.');
-                    return;
-                }
-                
-                const confirmMessage = `Are you sure you want to delete ${selectedIds.length} selected book(s)? This action cannot be undone.`;
-                if (!confirm(confirmMessage)) {
-                    return;
-                }
-                
-                try {
-                    const response = await fetch(`${API_URL}/books/bulk-delete`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ bookIds: selectedIds })
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (response.ok && data.success) {
-                        alert(`Successfully deleted ${selectedIds.length} book(s).`);
-                        clearSelection();
-                        loadBooks(); // Reload the books list
-                    } else {
-                        alert(data.message || 'Failed to delete books.');
-                    }
-                } catch (error) {
-                    console.error('Error deleting books:', error);
-                    alert('An error occurred while deleting books.');
-                }
-            }
-            
             // Load initial data
             loadDashboardStats();
         });
+        
+        // Global functions for bulk selection (outside DOMContentLoaded to be accessible from HTML)
+        function toggleSelectAll() {
+            const selectAllCheckbox = document.getElementById('selectAllBooks');
+            const bookCheckboxes = document.querySelectorAll('.book-checkbox');
+            
+            bookCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            
+            updateSelection();
+        }
+        
+        function updateSelection() {
+            const bookCheckboxes = document.querySelectorAll('.book-checkbox');
+            const selectedCheckboxes = document.querySelectorAll('.book-checkbox:checked');
+            const selectAllCheckbox = document.getElementById('selectAllBooks');
+            const bulkActions = document.getElementById('bulkActions');
+            const selectedCount = document.getElementById('selectedCount');
+            
+            // Update select all checkbox state
+            if (selectedCheckboxes.length === 0) {
+                selectAllCheckbox.indeterminate = false;
+                selectAllCheckbox.checked = false;
+            } else if (selectedCheckboxes.length === bookCheckboxes.length) {
+                selectAllCheckbox.indeterminate = false;
+                selectAllCheckbox.checked = true;
+            } else {
+                selectAllCheckbox.indeterminate = true;
+                selectAllCheckbox.checked = false;
+            }
+            
+            // Show/hide bulk actions
+            if (selectedCheckboxes.length > 0) {
+                bulkActions.classList.remove('hidden');
+                selectedCount.textContent = selectedCheckboxes.length;
+            } else {
+                bulkActions.classList.add('hidden');
+            }
+        }
+        
+        function clearSelection() {
+            const bookCheckboxes = document.querySelectorAll('.book-checkbox');
+            const selectAllCheckbox = document.getElementById('selectAllBooks');
+            
+            bookCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = false;
+            
+            updateSelection();
+        }
+        
+        async function bulkDeleteBooks() {
+            const selectedCheckboxes = document.querySelectorAll('.book-checkbox:checked');
+            const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+            
+            if (selectedIds.length === 0) {
+                alert('Please select books to delete.');
+                return;
+            }
+            
+            const confirmMessage = `Are you sure you want to delete ${selectedIds.length} selected book(s)? This action cannot be undone.`;
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+            
+            try {
+                const API_URL = '/api';
+                const token = localStorage.getItem('admin_token');
+                
+                const response = await fetch(`${API_URL}/books/bulk-delete`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ bookIds: selectedIds })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    alert(`Successfully deleted ${selectedIds.length} book(s).`);
+                    clearSelection();
+                    // Reload the books list by triggering the loadBooks function
+                    if (typeof loadBooks === 'function') {
+                        loadBooks();
+                    } else {
+                        location.reload();
+                    }
+                } else {
+                    alert(data.message || 'Failed to delete books.');
+                }
+            } catch (error) {
+                console.error('Error deleting books:', error);
+                alert('An error occurred while deleting books.');
+            }
+        }
     </script>
 </body>
 </html>
