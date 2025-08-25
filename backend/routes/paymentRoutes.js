@@ -1,6 +1,100 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const axios = require('axios');
+
+// PVS Payment Gateway Service URL
+const PVS_PG_URL = process.env.PVS_PG_URL || 'http://localhost:8990';
+
+// Payment creation endpoint - proxy to pvs_pg service
+router.post('/create', async (req, res) => {
+    console.log('=== PAYMENT CREATE REQUEST ===');
+    console.log('PVS_PG_URL:', PVS_PG_URL);
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+    
+    try {
+        // Forward request to pvs_pg service
+        console.log('Making request to:', `${PVS_PG_URL}/payment/create`);
+        const response = await axios.post(`${PVS_PG_URL}/payment/create`, req.body, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            timeout: 5000, // 5 second timeout for testing
+            family: 4 // Force IPv4
+        });
+        
+        console.log('PVS_PG Response:', response.data);
+        
+        // Forward the response back to client
+        res.status(response.status).json(response.data);
+        
+    } catch (error) {
+        console.error('Payment creation error:', error.message);
+        
+        if (error.response) {
+            // PVS_PG service responded with error
+            console.error('PVS_PG Error Response:', error.response.data);
+            res.status(error.response.status).json({
+                success: false,
+                message: 'Payment gateway error',
+                error: error.response.data
+            });
+        } else if (error.request) {
+            // No response from PVS_PG service
+            console.error('No response from PVS_PG service');
+            res.status(502).json({
+                success: false,
+                message: 'Payment gateway service unavailable',
+                error: 'Service connection failed'
+            });
+        } else {
+            // Other error
+            console.error('Payment request setup error:', error.message);
+            res.status(500).json({
+                success: false,
+                message: 'Internal server error',
+                error: error.message
+            });
+        }
+    }
+});
+
+// Payment update endpoint - proxy to pvs_pg service
+router.post('/update', async (req, res) => {
+    console.log('=== PAYMENT UPDATE REQUEST ===');
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+    
+    try {
+        // Forward request to pvs_pg service
+        const response = await axios.post(`${PVS_PG_URL}/payment/update`, req.body, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...req.headers
+            },
+            timeout: 30000
+        });
+        
+        console.log('PVS_PG Update Response:', response.data);
+        res.status(response.status).json(response.data);
+        
+    } catch (error) {
+        console.error('Payment update error:', error.message);
+        
+        if (error.response) {
+            res.status(error.response.status).json({
+                success: false,
+                message: 'Payment gateway error',
+                error: error.response.data
+            });
+        } else {
+            res.status(502).json({
+                success: false,
+                message: 'Payment gateway service unavailable',
+                error: 'Service connection failed'
+            });
+        }
+    }
+});
 
 // Payment callback endpoint
 router.post('/callback', (req, res) => {

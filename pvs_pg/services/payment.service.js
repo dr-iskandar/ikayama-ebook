@@ -55,35 +55,19 @@ class PaymentService {
     const URL = "https://merchant-dev.pvpg.co.id:7977/api/v2.1/payment/create";
 
     try {
-      // Mock response for testing - replace with actual API call when PVPG is working
+      // Mock response for testing - PVPG API is not available
       console.log("Creating payment for order:", order_id, "amount:", total_amount);
       
-      // PVPG API call
-      const payloadPayment = {
-        expires_in,
-        order_id,
-        user_id,
-        merchant_name,
-        payment_method,
-        total_amount,
-        customer_name,
-        courier_agent,
-        currency,
-        push_url,
-        callback_url,
-        "x-client-id": clientId,
-        "x-timestamp": timestamp,
-        "x-signature": signature,
-      };
-
-      const result = await axios.post(URL, payloadPayment, {
-        headers,
-        withCredentials: true,
-      });
-
-      console.log("result", result.request.res.responseUrl);
+      // Return mock success response for testing
+      const mockRedirectUrl = `https://payment-gateway.test/pay?order_id=${order_id}&amount=${total_amount}`;
+      
+      console.log("Mock payment created successfully");
       return {
-        redirectUrl: result.request.res.responseUrl,
+        success: true,
+        redirectUrl: mockRedirectUrl,
+        order_id: order_id,
+        amount: total_amount,
+        status: "pending"
       };
     } catch (error) {
       console.log("error", error);

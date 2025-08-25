@@ -186,17 +186,37 @@ exports.resendDownloadLink = async (req, res) => {
     }
     
     // Kirim ulang email
-    await sendDownloadEmail(
-      email, 
-      download.downloadLink, 
-      download.Book.title, 
-      download.format
-    );
-    
-    return res.status(200).json({
-      success: true,
-      message: 'Link unduhan telah dikirim ulang ke email'
-    });
+    try {
+      const emailResult = await sendDownloadEmail(
+        email, 
+        download.downloadLink, 
+        download.Book.title, 
+        download.format
+      );
+      
+      if (emailResult && emailResult.success) {
+        return res.status(200).json({
+          success: true,
+          message: 'Link unduhan telah dikirim ulang ke email',
+          emailSent: true
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: 'Link unduhan tersedia, namun email tidak dapat dikirim. Silakan gunakan link langsung.',
+          emailSent: false,
+          downloadLink: `${process.env.BASE_URL || 'http://localhost:3000'}${download.downloadLink}`
+        });
+      }
+    } catch (emailError) {
+      console.warn('Email sending failed, providing direct link:', emailError.message);
+      return res.status(200).json({
+        success: true,
+        message: 'Link unduhan tersedia, namun email tidak dapat dikirim. Silakan gunakan link langsung.',
+        emailSent: false,
+        downloadLink: `${process.env.BASE_URL || 'http://localhost:3000'}${download.downloadLink}`
+      });
+    }
   } catch (error) {
     console.error('Error resending download link:', error);
     return res.status(500).json({
@@ -292,36 +312,94 @@ exports.getDownloadStats = async (req, res) => {
 // Helper function untuk mengirim email unduhan
 async function sendDownloadEmail(to, downloadLink, bookTitle, format) {
   try {
-    const transporterConfig = {
-      service: process.env.EMAIL_SERVICE,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    };
+    // Validasi environment variables
+    if (!process.env.EMAIL_SERVICE || !process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.warn('Email service not configured, skipping email sending');
+      return { success: false, message: 'Email service not configured' };
+    }
+
+    console.log(`Attempting to send email to: ${to} for book: ${bookTitle}`);
+    
+    let transporterConfig;
+    
+    // Configure transporter based on email service
+    if (process.env.EMAIL_SERVICE === 'custom') {
+      // Custom SMTP configuration
+      transporterConfig = {
+        host: process.env.EMAIL_HOST,
+        port: parseInt(process.env.EMAIL_PORT) || 587,
+        secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for other ports
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        },
+        connectionTimeout: 10000,
+        greetingTimeout: 5000,
+        socketTimeout: 10000
+      };
+    } else {
+      // Predefined service configuration (gmail, hotmail, yahoo, etc.)
+      transporterConfig = {
+        service: process.env.EMAIL_SERVICE,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        },
+        connectionTimeout: 10000,
+        greetingTimeout: 5000,
+        socketTimeout: 10000
+      };
+    }
+    
+    console.log(`Using email service: ${process.env.EMAIL_SERVICE}`);
+    if (process.env.EMAIL_SERVICE === 'custom') {
+      console.log(`SMTP Host: ${process.env.EMAIL_HOST}:${process.env.EMAIL_PORT}`);
+    }
     
     const transporter = nodemailer.createTransport(transporterConfig);
     
+    // Verify transporter configuration
+    try {
+      await transporter.verify();
+      console.log('Email transporter verified successfully');
+    } catch (verifyError) {
+      console.error('Email transporter verification failed:', verifyError);
+      throw new Error('Email service configuration error');
+    }
+    
     const mailOptions = {
-      from: process.env.EMAIL_FROM,
+      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
       to,
       subject: `Link Unduhan ${bookTitle}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2>Link Unduhan untuk ${bookTitle}</h2>
           <p>Terima kasih telah mengunduh buku kami. Berikut adalah link untuk mengunduh buku dalam format ${format}:</p>
-          <p><a href="${process.env.BASE_URL}${downloadLink}" style="display: inline-block; background: #C8A2C8; color: white; padding: 12px 20px; text-decoration: none; border-radius: 4px; margin: 20px 0;">Unduh Buku</a></p>
+          <p><a href="${process.env.BASE_URL || 'http://localhost:3000'}${downloadLink}" style="display: inline-block; background: #C8A2C8; color: white; padding: 12px 20px; text-decoration: none; border-radius: 4px; margin: 20px 0;">Unduh Buku</a></p>
           <p>Link ini akan kadaluarsa dalam 24 jam.</p>
-          <p>Jika Anda memiliki pertanyaan, silakan hubungi kami di ${process.env.EMAIL_FROM}.</p>
+          <p>Jika Anda memiliki pertanyaan, silakan hubungi kami di ${process.env.EMAIL_FROM || process.env.EMAIL_USER}.</p>
           <hr style="border: 1px solid #eee; margin: 20px 0;">
           <p style="font-size: 12px; color: #666;">Email ini dikirim otomatis. Mohon jangan membalas email ini.</p>
         </div>
       `
     };
     
-    await transporter.sendMail(mailOptions);
+    const result = await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully:', result.messageId);
+    return { success: true, messageId: result.messageId };
+    
   } catch (error) {
     console.error('Error sending email:', error);
-    throw new Error('Gagal mengirim email');
+    
+    // Detailed error logging
+    if (error.code === 'EAUTH') {
+      console.error('Email authentication failed - check EMAIL_USER and EMAIL_PASS');
+    } else if (error.code === 'ECONNECTION') {
+      console.error('Email connection failed - check EMAIL_SERVICE configuration');
+    } else if (error.code === 'ETIMEDOUT') {
+      console.error('Email sending timed out - server may be slow');
+    }
+    
+    throw new Error(`Gagal mengirim email: ${error.message}`);
   }
 }

@@ -300,7 +300,19 @@ async function submitEmail() {
         
     } catch (error) {
         console.error('Error in submission process:', error);
-        alert('Gagal memproses permintaan. Silakan coba lagi nanti.');
+        
+        let errorMessage = 'Gagal memproses permintaan. Silakan coba lagi nanti.';
+        
+        // Handle specific error types
+        if (error.message.includes('Failed to create payment request')) {
+            errorMessage = 'Gagal membuat permintaan pembayaran. Periksa koneksi internet Anda dan coba lagi.';
+        } else if (error.message.includes('No redirect URL')) {
+            errorMessage = 'Sistem pembayaran sedang bermasalah. Silakan coba beberapa saat lagi.';
+        } else if (error.message.includes('fetch')) {
+            errorMessage = 'Koneksi ke server terputus. Periksa koneksi internet Anda.';
+        }
+        
+        alert(errorMessage);
         showStep('emailStep');
     }
 }
@@ -334,8 +346,10 @@ async function createPaymentRequest(email) {
             callback_url: `${window.location.origin}/payment/redirect`
         };
         
-        // Send request to pvs_pg payment gateway
-        const response = await fetch('https://ebook.ikayama.com/api/payment/create', {
+        console.log('Creating payment request:', paymentData);
+        
+        // Send request to backend payment proxy
+        const response = await fetch('/payment/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -343,11 +357,35 @@ async function createPaymentRequest(email) {
             body: JSON.stringify(paymentData)
         });
         
+        console.log('Payment response status:', response.status);
+        
         if (!response.ok) {
-            throw new Error('Failed to create payment request');
+            let errorMessage = 'Failed to create payment request';
+            
+            try {
+                const errorData = await response.json();
+                console.error('Payment error response:', errorData);
+                
+                if (response.status === 502) {
+                    errorMessage = 'Payment gateway service unavailable';
+                } else if (response.status === 500) {
+                    errorMessage = 'Internal server error';
+                } else if (errorData.message) {
+                    errorMessage = errorData.message;
+                }
+            } catch (parseError) {
+                console.error('Error parsing error response:', parseError);
+            }
+            
+            throw new Error(errorMessage);
         }
         
         const result = await response.json();
+        console.log('Payment gateway response:', result);
+        
+        if (result.success === false) {
+            throw new Error(result.message || 'Payment request failed');
+        }
         
         if (result.content && result.content.redirectUrl) {
             // Store payment info for callback handling
@@ -355,15 +393,27 @@ async function createPaymentRequest(email) {
             localStorage.setItem('paymentInProgress', 'true');
             localStorage.setItem('userEmail', email);
             
+            console.log('Redirecting to payment gateway:', result.content.redirectUrl);
+            
             // Redirect to payment gateway in the same page
             window.location.href = result.content.redirectUrl;
         } else {
-            console.error('Payment gateway response:', result);
+            console.error('Invalid payment gateway response:', result);
             throw new Error('No redirect URL received from payment gateway');
         }
         
     } catch (error) {
         console.error('Payment request error:', error);
+        
+        // Enhanced error handling with specific error types
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            throw new Error('Network connection failed. Please check your internet connection.');
+        } else if (error.message.includes('Payment gateway service unavailable')) {
+            throw new Error('Payment service is temporarily unavailable. Please try again later.');
+        } else if (error.message.includes('timeout')) {
+            throw new Error('Request timeout. Please try again.');
+        }
+        
         throw error;
     }
 }
