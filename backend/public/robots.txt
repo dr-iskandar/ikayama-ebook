@@ -1,0 +1,49 @@
+# Robots.txt untuk Ikayama - Katalog Ebook Gratis Indonesia
+# https://ikayama.com/robots.txt
+
+# Izinkan semua bot untuk mengakses semua konten
+User-agent: *
+Allow: /
+
+# Blokir akses ke direktori admin dan file sensitif
+Disallow: /admin/
+Disallow: /api/
+Disallow: /uploads/temp/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /*.log$
+Disallow: /error/
+
+# Izinkan akses khusus untuk bot Google
+User-agent: Googlebot
+Allow: /
+Allow: /api/books
+Disallow: /admin/
+Disallow: /private/
+
+# Izinkan akses untuk Bingbot
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+
+# Izinkan akses untuk bot media sosial
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# Lokasi sitemap
+Sitemap: https://ikayama.com/sitemap.xml
+
+# Crawl delay untuk menghindari overload server
+Crawl-delay: 1
+
+# Informasi tambahan
+# Website: https://ikayama.com
+# Deskripsi: Platform katalog ebook gratis terlengkap di Indonesia
+# Kontak: info@ikayama.com

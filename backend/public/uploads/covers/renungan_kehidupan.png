@@ -1,0 +1,18 @@
+<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6B7280;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#grad6)"/>
+  <text x="150" y="70" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">RENUNGAN</text>
+  <text x="150" y="100" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">KEHIDUPAN</text>
+  <text x="150" y="125" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#D1D5DB">dan</text>
+  <text x="150" y="150" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">PENDERITAAN</text>
+  <text x="150" y="350" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="white">PY</text>
+  <circle cx="150" cy="220" r="35" fill="none" stroke="#D1D5DB" stroke-width="1" opacity="0.5"/>
+  <circle cx="150" cy="220" r="20" fill="none" stroke="#F3F4F6" stroke-width="1" opacity="0.7"/>
+  <path d="M135 210 Q150 195 165 210 Q150 225 135 210" fill="none" stroke="#F3F4F6" stroke-width="2" opacity="0.8"/>
+  <circle cx="150" cy="210" r="3" fill="#F3F4F6" opacity="0.9"/>
+  <text x="150" y="280" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#D1D5DB">Meaning

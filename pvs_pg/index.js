@@ -42,9 +42,11 @@ sequelize
   .then(() => console.log("Database connected..."))
   .catch((err) => console.log("Unable to connect to database, Error: " + err));
 
+// Routes and middleware
+app.use(routes);
+app.use(notFoundMiddleware);
+app.use(handlerErrorMiddleware);
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-app.use(routes);
-app.use(notFoundMiddleware)
-app.use(handlerErrorMiddleware);

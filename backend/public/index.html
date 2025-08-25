@@ -3,9 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ikayama Ebooks Store</title>
+    <title>Ikayama - Katalog Ebook Gratis Indonesia | Download Buku Digital</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Ikayama adalah platform katalog ebook gratis terlengkap di Indonesia. Download ribuan buku digital berkualitas tinggi dalam berbagai kategori. Akses mudah, cepat, dan gratis untuk semua.">
+    <meta name="keywords" content="ikayama, ebook gratis, katalog buku, download ebook, buku digital indonesia, perpustakaan online, buku gratis, ebook indonesia">
+    <meta name="author" content="Ikayama">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Indonesian">
+    <meta name="revisit-after" content="7 days">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ikayama.com/">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Ikayama - Katalog Ebook Gratis Indonesia">
+    <meta property="og:description" content="Platform katalog ebook gratis terlengkap di Indonesia. Download ribuan buku digital berkualitas tinggi dalam berbagai kategori.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ikayama.com/">
+    <meta property="og:image" content="https://ikayama.com/assets/ikayama-og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Ikayama">
+    <meta property="og:locale" content="id_ID">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ikayama - Katalog Ebook Gratis Indonesia">
+    <meta name="twitter:description" content="Platform katalog ebook gratis terlengkap di Indonesia. Download ribuan buku digital berkualitas tinggi.">
+    <meta name="twitter:image" content="https://ikayama.com/assets/ikayama-twitter-card.jpg">
+    <meta name="twitter:site" content="@ikayama">
+    <meta name="twitter:creator" content="@ikayama">
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#C8A2C8">
+    <meta name="msapplication-TileColor" content="#C8A2C8">
+    <meta name="msapplication-config" content="/browserconfig.xml">
     <!-- Menggunakan CDN Tailwind (untuk pengembangan) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./dist/output.css" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -372,7 +415,7 @@
         // Tujuannya untuk mencoba mengatasi masalah CORS
         document.addEventListener('DOMContentLoaded', function() {
             // Cek koneksi API
-            fetch('http://localhost:8510/api/books', {
+            fetch('https://ebook.ikayama.com/api/books', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -389,6 +432,103 @@
                 console.error('Koneksi ke API gagal:', error);
             });
         });
+    </script>
+    
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://ikayama.com/#organization",
+                "name": "Ikayama",
+                "url": "https://ikayama.com",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://ikayama.com/assets/ikayama-logo.png",
+                    "width": 200,
+                    "height": 60
+                },
+                "description": "Platform katalog ebook gratis terlengkap di Indonesia yang menyediakan akses mudah ke ribuan buku digital berkualitas tinggi.",
+                "foundingDate": "2024",
+                "contactPoint": {
+                    "@type": "ContactPoint",
+                    "contactType": "customer service",
+                    "email": "info@ikayama.com"
+                },
+                "sameAs": [
+                    "https://twitter.com/ikayama",
+                    "https://facebook.com/ikayama",
+                    "https://instagram.com/ikayama"
+                ]
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://ikayama.com/#website",
+                "url": "https://ikayama.com",
+                "name": "Ikayama - Katalog Ebook Gratis Indonesia",
+                "description": "Platform katalog ebook gratis terlengkap di Indonesia. Download ribuan buku digital berkualitas tinggi dalam berbagai kategori.",
+                "publisher": {
+                    "@id": "https://ikayama.com/#organization"
+                },
+                "inLanguage": "id-ID",
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": {
+                        "@type": "EntryPoint",
+                        "urlTemplate": "https://ikayama.com/search?q={search_term_string}"
+                    },
+                    "query-input": "required name=search_term_string"
+                }
+            },
+            {
+                "@type": "CollectionPage",
+                "@id": "https://ikayama.com/#catalog",
+                "url": "https://ikayama.com",
+                "name": "Katalog Ebook Gratis Ikayama",
+                "description": "Koleksi lengkap ebook gratis dalam berbagai kategori: teknologi, bisnis, pendidikan, fiksi, dan banyak lagi.",
+                "mainEntity": {
+                    "@type": "ItemList",
+                    "name": "Daftar Ebook Gratis",
+                    "description": "Koleksi ebook gratis berkualitas tinggi yang dapat didownload secara gratis",
+                    "numberOfItems": "1000+"
+                },
+                "about": [
+                    {
+                        "@type": "Thing",
+                        "name": "Ebook Gratis"
+                    },
+                    {
+                        "@type": "Thing",
+                        "name": "Buku Digital Indonesia"
+                    },
+                    {
+                        "@type": "Thing",
+                        "name": "Perpustakaan Online"
+                    }
+                ]
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": "https://ikayama.com/#breadcrumb",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Home",
+                        "item": "https://ikayama.com"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "Katalog Ebook",
+                        "item": "https://ikayama.com/#catalog"
+                    }
+                ]
+            }
+        ]
+    }
     </script>
 </head>
 <body class="bg-primary-lightest min-h-screen flex flex-col">

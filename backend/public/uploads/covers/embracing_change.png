@@ -1,0 +1,17 @@
+<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0D9488;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#grad3)"/>
+  <text x="150" y="70" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="white">EMBRACING</text>
+  <text x="150" y="100" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="white">CHANGE</text>
+  <text x="150" y="130" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#D1FAE5">Wisdom, Growth, and Harmony</text>
+  <text x="150" y="350" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="white">PY</text>
+  <path d="M120 200 Q150 170 180 200 Q150 230 120 200" fill="none" stroke="white" stroke-width="3" opacity="0.7"/>
+  <path d="M110 220 Q150 190 190 220 Q150 250 110 220" fill="none" stroke="white" stroke-width="2" opacity="0.5"/>
+  <circle cx="150" cy="210" r="5" fill="white" opacity="0.8"/>
+  <text x="150" y="280" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#D1FAE5">Personal Growth • Change Management</text>
+</svg>
