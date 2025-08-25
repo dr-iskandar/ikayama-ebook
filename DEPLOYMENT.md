@@ -1,18 +1,34 @@
-# Ikayama Ebook - Deployment Guide
+# Deployment Guide - Ikayama Katalog
 
-## Overview
-This guide covers the complete deployment process for Ikayama Ebook application to production server with SSL certificate and domain configuration.
+## 🚀 Production Deployment
 
-**Production Details:**
-- Server: 212.85.26.230
-- Domain: ebook.ikayama.com
-- SSL: Let's Encrypt via Certbot
-- Web Server: Nginx (reverse proxy)
-- Process Manager: PM2
-- Backend Port: 5011 (internal)
-- Payment Gateway Port: 5012 (internal)
+Panduan lengkap untuk deploy Ikayama Katalog ke production server.
 
-## Prerequisites
+## 📋 Prerequisites
+
+### Server Requirements
+- **OS**: Ubuntu 20.04 LTS atau CentOS 8+
+- **RAM**: Minimum 2GB, Recommended 4GB+
+- **Storage**: Minimum 20GB SSD
+- **CPU**: 2 cores minimum
+- **Network**: Public IP dengan domain name
+
+### Software Requirements
+- Node.js v16+ 
+- MySQL 8.0+
+- Nginx 1.18+
+- PM2 (Process Manager)
+- Git
+- SSL Certificate (Let's Encrypt)
+
+### Production Details
+- **Server**: 212.85.26.230
+- **Domain**: ebook.ikayama.com
+- **SSL**: Let's Encrypt via Certbot
+- **Web Server**: Nginx (reverse proxy)
+- **Process Manager**: PM2
+- **Backend Port**: 5011 (internal)
+- **Payment Gateway Port**: 5012 (internal)
 
 ### 1. Domain Configuration
 Ensure that `ebook.ikayama.com` points to `212.85.26.230`:

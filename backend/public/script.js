@@ -1,5 +1,5 @@
 // Tambahkan konfigurasi API
-const API_URL = 'http://localhost:8510/api';
+const API_URL = 'https://ebook.ikayama.com/api';
 
 // Tambahkan state management sederhana
 const state = {
@@ -335,7 +335,7 @@ async function createPaymentRequest(email) {
         };
         
         // Send request to pvs_pg payment gateway
-        const response = await fetch('http://localhost:8995/payment/create', {
+        const response = await fetch('https://ebook.ikayama.com/api/payment/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

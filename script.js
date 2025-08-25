@@ -1,5 +1,5 @@
 // Tambahkan konfigurasi API
-const API_URL = 'http://localhost:8510/api';
+const API_URL = 'https://ebook.ikayama.com/api';
 
 // Tambahkan state management sederhana
 const state = {
@@ -237,11 +237,11 @@ async function processPayment() {
             customer_name: 'Customer',
             courier_agent: '',
             currency: 'IDR',
-            push_url: 'http://localhost:8995/payment/update',
-            callback_url: 'http://localhost:8510'
+            push_url: 'https://ebook.ikayama.com/api/payment/update',
+            callback_url: 'https://ebook.ikayama.com/payment/redirect'
         };
         
-        const response = await fetch('http://localhost:8995/payment/create', {
+        const response = await fetch('https://ebook.ikayama.com/api/payment/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

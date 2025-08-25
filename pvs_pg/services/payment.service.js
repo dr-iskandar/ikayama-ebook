@@ -55,6 +55,10 @@ class PaymentService {
     const URL = "https://merchant-dev.pvpg.co.id:7977/api/v2.1/payment/create";
 
     try {
+      // Mock response for testing - replace with actual API call when PVPG is working
+      console.log("Creating payment for order:", order_id, "amount:", total_amount);
+      
+      // PVPG API call
       const payloadPayment = {
         expires_in,
         order_id,

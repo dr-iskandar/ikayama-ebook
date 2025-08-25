@@ -19,7 +19,7 @@ module.exports = {
         DB_PORT: 5432,
         DB_NAME: 'ikayama_db_prod',
         DB_USER: 'ikayama_user',
-        DB_PASSWORD: 'secure_password_here',
+        DB_PASSWORD: 'CHANGE_THIS_SECURE_PASSWORD',
         JWT_SECRET: 'production_jwt_secret_very_secure',
         JWT_EXPIRES_IN: '24h',
         EMAIL_SERVICE: 'gmail',
