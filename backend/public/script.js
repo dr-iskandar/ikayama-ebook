@@ -1,5 +1,5 @@
 // Tambahkan konfigurasi API
-const API_URL = 'http://localhost:8510/api';
+const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:8510/api' : '/api';
 
 // Tambahkan state management sederhana
 const state = {
