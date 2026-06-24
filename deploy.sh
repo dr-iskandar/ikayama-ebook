@@ -53,7 +53,10 @@ deploy_to_server() {
         if [ -d .git ]; then \
             git pull origin main; \
         else \
-            git clone $GIT_REPO .; \
+            git init && \
+            git remote add origin $GIT_REPO && \
+            git fetch && \
+            git checkout -f main; \
         fi"
     
     # Install dependencies
