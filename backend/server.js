@@ -5,7 +5,7 @@ const { syncDatabase } = require('./models');
 
 // Load environment variables based on NODE_ENV
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
-require('dotenv').config({ path: envFile });
+require('dotenv').config({ path: path.join(__dirname, envFile) });
 
 // Import routes
 const bookRoutes = require('./routes/bookRoutes');

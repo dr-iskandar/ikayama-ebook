@@ -10,7 +10,7 @@ ENV=${1:-production}
 SERVER_IP="212.85.26.230"
 APP_NAME="ikayama-ebook"
 APP_PATH="/var/www/$APP_NAME"
-GIT_REPO="git@github.com:username/ikayama_katalog.git"  # Update this with actual repo URL
+GIT_REPO="https://github.com/dr-iskandar/ikayama-ebook.git"
 
 echo "🚀 Starting deployment to $ENV environment..."
 
