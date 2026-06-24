@@ -114,6 +114,63 @@ const books = [
       'Pengembangan integritas',
       'Inspirasi kehidupan'
     ]
+  },
+  {
+    title: 'The Wide Way',
+    author: 'PY',
+    synopsis: 'A Journey of Love, Integrity, and Vision" is a compelling exploration of transformative leadership in the modern world. Written as a tribute to Pak Pardjo, this book showcases how visionary leadership rooted in compassion, integrity, and humanity can inspire teams, overcome crises, and build a thriving organizational culture.',
+    previewImage: 'assets/images/preview/wide_way.png',
+    language: 'English',
+    pages: 25,
+    formats: ['PDF', 'EPUB'],
+    fileSize: '1.7 MB',
+    pdfPath: 'uploads/books/wide_way.pdf',
+    epubPath: 'uploads/books/wide_way.epub',
+    tags: ['Leadership', 'Compassionate Culture'],
+    features: [
+      'Visionary Leadership',
+      'Compassionate Culture',
+      'Conflict Resolution with Wisdom',
+      'Legacy of Kindness'
+    ]
+  },
+  {
+    title: 'Soul Of Beauty and Fashion',
+    author: 'PY',
+    synopsis: '"The Soul of Beauty and Fashion" is an inspiring journey that celebrates the transformative power of fashion, creativity, and unwavering love. Written as a tribute to a daughter\'s dreams, this book showcases the beautiful intersection of personal growth, artistic expression, and the enduring bond between parent and child. It offers readers a heartfelt narrative interwoven with original fashion designs, life lessons, and motivational insights.',
+    previewImage: 'assets/images/preview/soul_of_beauty_and_fashion.png',
+    language: 'English',
+    pages: 25,
+    formats: ['PDF', 'EPUB'],
+    fileSize: '1.7 MB',
+    pdfPath: 'uploads/books/soul_of_beauty_and_fashion.pdf',
+    epubPath: 'uploads/books/soul_of_beauty_and_fashion.epub',
+    tags: ['Inspirational Story', 'Legacy & Social Impact'],
+    features: [
+      'Inspirational Story',
+      'Original Fashion Designs',
+      'Philosophy of Beauty & Fashion',
+      'Resilience & Motivation'
+    ]
+  },
+  {
+    title: 'Compassionate Economy',
+    author: 'PY',
+    synopsis: '"Compassionate Economy" explores how economic systems can be redesigned to prioritize human well-being, environmental sustainability, and social justice. This book presents a framework for integrating compassion into business practices, policy-making, and global economic structures. It offers practical strategies for leaders, entrepreneurs, and citizens to build a more equitable and sustainable economic future.',
+    previewImage: 'uploads/covers/compassionate_economy_1755947716943-228709365.png',
+    language: 'English',
+    pages: 34,
+    formats: ['PDF'],
+    fileSize: '0.52 MB',
+    pdfPath: 'uploads/books/compassionate_economy_1755947716950-904745537.pdf',
+    epubPath: '',
+    tags: ['Leadership', 'Personal Growth', 'Mindfulness'],
+    features: [
+      'Sustainable business models',
+      'Economic ethics',
+      'Social impact strategies',
+      'Compassionate leadership'
+    ]
   }
 ];
 
