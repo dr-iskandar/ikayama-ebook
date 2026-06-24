@@ -135,13 +135,7 @@ setup_nginx() {
 setup_server() {
     print_status "Setting up server for first deployment..."
     
-    ssh root@$SERVER_IP "apt update && \
-        apt install -y nodejs npm git nginx certbot python3-certbot-nginx && \
-        npm install -g pm2 && \
-        pm2 startup && \
-        mkdir -p $APP_PATH && \
-        systemctl enable nginx && \
-        systemctl start nginx"
+    ssh root@$SERVER_IP "mkdir -p $APP_PATH"
     
     # Setup Nginx configuration (HTTP bootstrap)
     setup_nginx
