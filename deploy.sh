@@ -118,17 +118,17 @@ setup_ssl() {
 
 # Setup Nginx configuration
 setup_nginx() {
-    print_status "Setting up Nginx configuration..."
+    print_status "Setting up Nginx configuration (HTTP bootstrap)..."
     
-    # Copy nginx configuration
-    scp nginx.conf root@$SERVER_IP:/etc/nginx/sites-available/ebook.ikayama.com
+    # Copy nginx configuration (HTTP only first)
+    scp nginx-http-only.conf root@$SERVER_IP:/etc/nginx/sites-available/ebook.ikayama.com
     
     # Enable site and restart nginx
     ssh root@$SERVER_IP "ln -sf /etc/nginx/sites-available/ebook.ikayama.com /etc/nginx/sites-enabled/ && \
         nginx -t && \
         systemctl reload nginx"
     
-    print_status "Nginx configuration completed!"
+    print_status "Nginx bootstrap configuration completed!"
 }
 
 # Setup server (first time only)
@@ -143,11 +143,16 @@ setup_server() {
         systemctl enable nginx && \
         systemctl start nginx"
     
-    # Setup Nginx configuration
+    # Setup Nginx configuration (HTTP bootstrap)
     setup_nginx
     
     # Setup SSL certificate
     setup_ssl
+    
+    # Copy final SSL-enabled Nginx configuration
+    print_status "Applying final Nginx HTTPS configuration..."
+    scp nginx.conf root@$SERVER_IP:/etc/nginx/sites-available/ebook.ikayama.com
+    ssh root@$SERVER_IP "nginx -t && systemctl reload nginx"
     
     print_status "Server setup completed!"
 }
