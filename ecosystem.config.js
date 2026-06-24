@@ -14,19 +14,7 @@ module.exports = {
       },
       env_production: {
         NODE_ENV: 'production',
-        PORT: 5011,
-        DB_HOST: 'localhost',
-        DB_PORT: 5432,
-        DB_NAME: 'ikayama_db_prod',
-        DB_USER: 'ikayama_user',
-        DB_PASSWORD: 'CHANGE_THIS_SECURE_PASSWORD',
-        JWT_SECRET: 'production_jwt_secret_very_secure',
-        JWT_EXPIRES_IN: '24h',
-        EMAIL_SERVICE: 'gmail',
-        EMAIL_USER: 'noreply@ikayama.com',
-        EMAIL_PASS: 'production_email_password',
-        EMAIL_FROM: 'noreply@ikayama.com',
-        BASE_URL: 'https://ebook.ikayama.com'
+        PORT: 5011
       },
       error_file: './logs/backend-error.log',
       out_file: './logs/backend-out.log',
