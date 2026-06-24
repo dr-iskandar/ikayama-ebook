@@ -1,11 +1,11 @@
-const express = require('express');
-const cors = require('cors');
 const path = require('path');
-const { syncDatabase } = require('./models');
-
 // Load environment variables based on NODE_ENV
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
 require('dotenv').config({ path: path.join(__dirname, envFile) });
+
+const express = require('express');
+const cors = require('cors');
+const { syncDatabase } = require('./models');
 
 // Import routes
 const bookRoutes = require('./routes/bookRoutes');
